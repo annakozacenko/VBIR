@@ -1,72 +1,55 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Form</title>
+    <title>Notion Form</title>
 </head>
 <body>
-    <form id="orderForm">
+    <form id="notionForm">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br>
-        <label for="message">Message:</label>
-        <textarea id="message" name="message" required></textarea><br>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="task">Task:</label>
+        <input type="task" id="task" name="task" required>
+
         <button type="submit">Submit</button>
     </form>
 
     <script>
-        document.getElementById('orderForm').addEventListener('submit', async function(event) {
+        const notionForm = document.getElementById('notionForm');
+        
+        notionForm.addEventListener('submit', async function (event) {
             event.preventDefault();
-            const form = event.target;
-            const data = new FormData(form);
-            const payload = {
-                "parent": {
-    "type": "database_id",
-    "database_id": "e9a0e27389c94b92b556c790bc11142e"
-  },
 
-"properties": {
-    "Name": {
-      "type": "title",
-      "title": [
-        {
-          "type": "text",
-          "text": {
-            "content": data.get('name')
-          }
-        }
-      ]
-    },
-"Message": {
-      "rich_text": [
-        {
-          "type": "text",
-          "text": {
-            "content": data.get('message')
-          }
-        }
-      ]
-    }
-}
-            };
+            const name = document.getElementById('name').value;
+            const task = document.getElementById('task').value;
 
-            const response = await fetch('https://api.notion.com/v1/pages', {
+            // Call the backend script to save data to Notion
+            await saveToNotion(name, task);
+        });
+
+        async function saveToNotion(name, task) {
+            const url = 'http://localhost:3000/submit-to-notion'; // Update with your server URL
+
+            await fetch(url, {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer secret_oZWrGAN2SSR1C5mZHWCSPgq0nx24kWNT9tIX92dKPCO', // Замените на ваш API ключ Notion
-                    'Content-Type': 'application/json',
-                    'Notion-Version': '2022-06-28'
+                  'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({ name, task })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to save data to Notion.');
             });
-
-            if (response.ok) {
-                alert('Message sent successfully!');
-                form.reset();
-            } else {
-                alert('Failed to send message.');
-            }
-        });
+        }
     </script>
 </body>
 </html>
