@@ -20,7 +20,7 @@
             const form = event.target;
             const data = new FormData(form);
             const payload = {
-                "parent": { "database_id": "your_database_id" }, // Замените на ID вашей базы данных
+                "parent": { "database_id": "418a6651e44b4e44a44f1e2b668a1806" }, // Замените на ID вашей базы данных
                 "properties": {
                     "Name": { "title": [{ "text": { "content": data.get('name') } }] },
                     "Message": { "rich_text": [{ "text": { "content": data.get('message') } }] }
