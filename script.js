@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 
 app.post('/submit-to-notion', async (req, res) => {
     try {
-        const { name, email } = req.body;
+        const { name, task } = req.body;
         const notionDatabaseId = 'e9a0e27389c94b92b556c790bc11142e';
         const integrationToken = 'secret_oZWrGAN2SSR1C5mZHWCSPgq0nx24kWNT9tIX92dKPCO';
 
