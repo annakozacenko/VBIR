@@ -1,48 +1,31 @@
-const express = require('express');
-const fetch = require('node-fetch');
-const bodyParser = require('body-parser');
+const notionForm = document.getElementById('notionForm');
 
-const app = express();
-const PORT = 3000; // Choose an available port
+notionForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
 
-app.use(bodyParser.json());
+    const name = document.getElementById('name').value;
+    const task = document.getElementById('task').value;
 
-app.post('/submit-to-notion', async (req, res) => {
-    try {
-        const { name, task } = req.body;
-        const notionDatabaseId = 'e9a0e27389c94b92b556c790bc11142e';
-        const integrationToken = 'secret_oZWrGAN2SSR1C5mZHWCSPgq0nx24kWNT9tIX92dKPCO';
-
-        const url = `https://api.notion.com/v1/pages`;
-
-        const data = {
-            parent: { database_id: notionDatabaseId },
-            properties: {
-                Name: { title: [{ text: { content: name } }] },
-                Task: { task: task }
-                // Add more properties based on your Notion database schema
-            }
-        };
-
-       const result = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${integrationToken}`,
-                'Notion-Version': '2021-08-16'
-            },
-            body: JSON.stringify(data)
-        });
-
-        if(result.status !== 200) {
-          const error = await result.json();
-          console.error('Got error saving data', error);
-          return res.status(500).json({ error: error.message });
-        }
-
-        res.status(200).json({ message: 'Data saved to Notion!' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+    // Call the backend script to save data to Notion
+    await saveToNotion(name, task);
 });
+
+async function saveToNotion(name, task) {
+    const url = 'https://your-project-name.vercel.app/submit-to-notion'; // Update with your deployed server URL
+
+    await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, task })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save data to Notion.');
+    });
+}
