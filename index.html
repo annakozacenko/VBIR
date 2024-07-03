@@ -20,11 +20,34 @@
             const form = event.target;
             const data = new FormData(form);
             const payload = {
-                "parent": { "database_id": "418a6651e44b4e44a44f1e2b668a1806" }, // Замените на ID вашей базы данных
-                "properties": {
-                    "Name": { "title": [{ "text": { "content": data.get('name') } }] },
-                    "Message": { "rich_text": [{ "text": { "content": data.get('message') } }] }
-                }
+                "parent": {
+    "type": "database_id",
+    "database_id": "e9a0e27389c94b92b556c790bc11142e"
+  },
+
+"properties": {
+    "Name": {
+      "type": "title",
+      "title": [
+        {
+          "type": "text",
+          "text": {
+            "content": data.get('name')
+          }
+        }
+      ]
+    },
+"Message": {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": {
+            "content": data.get('message')
+          }
+        }
+      ]
+    }
+}
             };
 
             const response = await fetch('https://api.notion.com/v1/pages', {
