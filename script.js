@@ -11,8 +11,10 @@ notionForm.addEventListener('submit', async function (event) {
 });
 
 async function saveToNotion(name, task) {
-    const url = 'https://your-project-name.vercel.app/submit-to-notion'; // Update with your deployed server URL
+    const url = 'https://vbir-jw8fkqa1o-annakozacenkos-projects.vercel.app'; // Update with your deployed server URL
 
+
+    
     await fetch(url, {
         method: 'POST',
         headers: {
